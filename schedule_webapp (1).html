@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Calendario Turnos - Agosto 2025</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Turnos">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Icons for PWA -->
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text x='50' y='65' font-size='60' text-anchor='middle' fill='white'>📅</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text x='50' y='65' font-size='60' text-anchor='middle' fill='white'>📅</text></svg>">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Calendario de Turnos&quot;,&quot;short_name&quot;:&quot;Turnos&quot;,&quot;description&quot;:&quot;Sistema de gestión de turnos de trabajo&quot;,&quot;start_url&quot;:&quot;/&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23667eea&quot;,&quot;theme_color&quot;:&quot;%23667eea&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23667eea'/><text x='256' y='320' font-size='300' text-anchor='middle' fill='white'>📅</text></svg>&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any maskable&quot;}]}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1f2937;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Mobile-optimized header */
+        .app-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .app-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Month navigation */
+        .month-nav {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 1rem;
+            border-radius: 15px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .current-month {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* Employee filter tabs */
+        .employee-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 1rem 1rem;
+            gap: 0.75rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .employee-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .employee-tab {
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .employee-tab.active {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .employee-tab:active {
+            transform: scale(0.95);
+        }
+
+        .tab-all { 
+            background: linear-gradient(135deg, #374151, #1f2937);
+            color: white;
+        }
+        .tab-rosemary { 
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+            color: white;
+        }
+        .tab-alfred { 
+            background: linear-gradient(135deg, #22d3ee, #0891b2);
+            color: white;
+        }
+        .tab-rocio { 
+            background: linear-gradient(135deg, #34d399, #10b981);
+            color: white;
+        }
+        .tab-andrea { 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+
+        /* Calendar container */
+        .calendar-container {
+            flex: 1;
+            margin: 0 1rem 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+        }
+
+        .day-header {
+            padding: 0.75rem 0.25rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+        }
+
+        .calendar-day {
+            background: white;
+            min-height: 80px;
+            padding: 4px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-day:active {
+            background: #f3f4f6;
+            transform: scale(0.98);
+        }
+
+        .calendar-day.empty {
+            background: #f9fafb;
+            cursor: default;
+        }
+
+        .calendar-day.empty:active {
+            transform: none;
+            background: #f9fafb;
+        }
+
+        .day-number {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .day-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+
+        .shifts-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .shift-badge {
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 0.625rem;
+            font-weight: 600;
+            border-left: 3px solid;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shift-badge:active {
+            transform: scale(0.95);
+        }
+
+        .badge-rosemary {
+            background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+            border-left-color: #ec4899;
+            color: #be185d;
+        }
+
+        .badge-alfred {
+            background: linear-gradient(135deg, #ecfeff, #cffafe);
+            border-left-color: #0891b2;
+            color: #164e63;
+        }
+
+        .badge-rocio {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border-left-color: #10b981;
+            color: #065f46;
+        }
+
+        .badge-andrea {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .employee-name {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .shift-time {
+            font-size: 0.5rem;
+            opacity: 0.8;
+            margin-top: 1px;
+        }
+
+        /* Stats panel */
+        .stats-panel {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            margin: 1rem;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-title {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .employee-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .employee-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .employee-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .avatar-rosemary { background: linear-gradient(135deg, #f472b6, #ec4899); }
+        .avatar-alfred { background: linear-gradient(135deg, #22d3ee, #0891b2); }
+        .avatar-rocio { background: linear-gradient(135deg, #34d399, #10b981); }
+        .avatar-andrea { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+        .employee-hours {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 0.25rem;
+        }
+
+        .employee-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
+            justify-content: center;
+        }
+
+        .action-btn {
+            flex: 1;
+            max-width: 120px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-share {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-install {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        /* Install prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .install-prompt.show {
+            transform: translateY(0);
+        }
+
+        .install-text {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .install-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .install-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .install-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .install-btn:active {
+            transform: scale(0.95);
+        }
+
+        .close-install {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(102, 126, 234, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            z-index: 1500;
+            transform: translateY(-100px);
+            transition: transform 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-height: 700px) {
+            .calendar-day {
+                min-height: 70px;
+            }
+        }
+
+        @media screen and (max-height: 600px) {
+            .calendar-day {
+                min-height: 60px;
+            }
+            
+            .stats-panel {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+        }
+
+        /* Landscape mode adjustments */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .app-header {
+                padding: 0.5rem;
+            }
+            
+            .app-title {
+                font-size: 1rem;
+            }
+            
+            .month-nav {
+                margin: 0.5rem;
+                padding: 0.75rem;
+            }
+            
+            .calendar-day {
+                min-height: 50px;
+            }
+            
+            .stats-panel {
+                display: none;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .calendar-container {
+                background: rgba(31, 41, 55, 0.95);
+            }
+            
+            .calendar-day {
+                background: #374151;
+                color: white;
+            }
+            
+            .calendar-day.empty {
+                background: #1f2937;
+            }
+            
+            .day-number {
+                color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <h1 class="app-title">📅 Calendario de Turnos</h1>
+            <p class="app-subtitle">Agosto 2025 • Sistema de Gestión</p>
+        </header>
+
+        <!-- Month Navigation -->
+        <div class="month-nav">
+            <button class="nav-btn" onclick="changeMonth(-1)" aria-label="Mes anterior">◀</button>
+            <h2 class="current-month" id="currentMonth">Agosto 2025</h2>
+            <button class="nav-btn" onclick="changeMonth(1)" aria-label="Mes siguiente">▶</button>
+        </div>
+
+        <!-- Employee Filter Tabs -->
+        <div class="employee-tabs">
+            <button class="employee-tab tab-all active" onclick="filterEmployee('all')" data-employee="all">
+                👥 Todos
+            </button>
+            <button class="employee-tab tab-rosemary" onclick="filterEmployee('rosemary')" data-employee="rosemary">
+                🌹 Rosemary
+            </button>
+            <button class="employee-tab tab-alfred" onclick="filterEmployee('alfred')" data-employee="alfred">
+                ⚡ Alfred
+            </button>
+            <button class="employee-tab tab-rocio" onclick="filterEmployee('rocio')" data-employee="rocio">
+                🌙 Rocío
+            </button>
+            <button class="employee-tab tab-andrea" onclick="filterEmployee('andrea')" data-employee="andrea">
+                ☀️ Andrea
+            </button>
+        </div>
+
+        <!-- Calendar -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div class="day-header">LUN</div>
+                <div class="day-header">MAR</div>
+                <div class="day-header">MIE</div>
+                <div class="day-header">JUE</div>
+                <div class="day-header">VIE</div>
+                <div class="day-header">SAB</div>
+                <div class="day-header">DOM</div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn btn-share" onclick="shareCalendar()">
+                📤 Compartir
+            </button>
+            <button class="action-btn btn-install" onclick="showInstallPrompt()" id="installBtn">
+                📱 Instalar
+            </button>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <h3 class="stats-title">📊 Estadísticas del Mes</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-number">52</div>
+                    <div class="stat-label">Turnos Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌅</div>
+                    <div class="stat-number">26</div>
+                    <div class="stat-label">T. Mañana</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌙</div>
+                    <div class="stat-number">26</div>
+                    <div class="stat-label">T. Noche</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-number">545</div>
+                    <div class="stat-label">H. Totales</div>
+                </div>
+            </div>
+
+            <div class="employee-summary">
+                <div class="employee-card">
+                    <div class="employee-avatar avatar-rosemary">R</div>
+                    <div class="employee-hours">159</div>
+                    <div class="employee-label">Horas Rosemary</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-avatar avatar-alfred">A</div>
+                    <div class="employee-hours">158</div>
+                    <div class="employee-label">Horas Alfred</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-avatar avatar-rocio">R</div>
+                    <div class="employee-hours">147</div>
+                    <div class="employee-label">Horas Rocío</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-avatar avatar-andrea">A</div>
+                    <div class="employee-hours">81</div>
+                    <div class="employee-label">Horas Andrea</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-text">
+            <div class="install-title">¡Instalar App!</div>
+            <div class="install-subtitle">Accede rápidamente desde tu pantalla de inicio</div>
+        </div>
+        <button class="install-btn" onclick="installApp()">Instalar</button>
+        <button class="close-install" onclick="hideInstallPrompt()" aria-label="Cerrar">×</button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Schedule data
+        const scheduleData = {
+            1: {day: 'Viernes', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            2: {day: 'Sábado', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            3: {day: 'Domingo', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 02:00', icon: '🌙'}
+            ]},
+            4: {day: 'Lunes', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            5: {day: 'Martes', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            6: {day: 'Miércoles', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            7: {day: 'Jueves', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            8: {day: 'Viernes', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            9: {day: 'Sábado', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            10: {day: 'Domingo', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙'}
+            ]},
+            11: {day: 'Lunes', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            12: {day: 'Martes', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            13: {day: 'Miércoles', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            14: {day: 'Jueves', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            15: {day: 'Viernes', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            16: {day: 'Sábado', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            17: {day: 'Domingo', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙'}
+            ]},
+            18: {day: 'Lunes', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            19: {day: 'Martes', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            20: {day: 'Miércoles', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            21: {day: 'Jueves', shifts: [
+                {employee: 'alfred', name: 'Alfred', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            22: {day: 'Viernes', shifts: [
+                {employee: 'andrea', name: 'Andrea', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            23: {day: 'Sábado', shifts: [
+                {employee: 'andrea', name: 'Andrea', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'alfred', name: 'Alfred', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            24: {day: 'Domingo', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙'}
+            ]},
+            25: {day: 'Lunes', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            26: {day: 'Martes', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            27: {day: 'Miércoles', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'alfred', name: 'Alfred', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            28: {day: 'Jueves', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'alfred', name: 'Alfred', time: '17:00 - 02:00', icon: '🌙'}
+            ]},
+            29: {day: 'Viernes', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '7:00 - 17:00', icon: '🌅'},
+                {employee: 'alfred', name: 'Alfred', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            30: {day: 'Sábado', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'alfred', name: 'Alfred', time: '18:00 - 03:00', icon: '🌙'}
+            ]},
+            31: {day: 'Domingo', shifts: [
+                {employee: 'rosemary', name: 'Rosemary', time: '8:00 - 18:00', icon: '🌅'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙'}
+            ]}
+        };
+
+        // App state
+        let currentFilter = 'all';
+        let deferredPrompt;
+        let isInstalled = false;
+
+        // Check if app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            isInstalled = true;
+            document.getElementById('installBtn').style.display = 'none';
+        }
+
+        // PWA install prompt handling
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install prompt after 3 seconds if not installed
+            if (!isInstalled) {
+                setTimeout(() => {
+                    document.getElementById('installPrompt').classList.add('show');
+                }, 3000);
+            }
+        });
+
+        // Track app install
+        window.addEventListener('appinstalled', () => {
+            isInstalled = true;
+            document.getElementById('installPrompt').classList.remove('show');
+            document.getElementById('installBtn').style.display = 'none';
+            showNotification('¡App instalada correctamente! 🎉');
+        });
+
+        // Utility functions
+        function getCalendarDays() {
+            const days = [];
+            const augustStart = new Date(2025, 7, 1);
+            const dayOfWeek = augustStart.getDay();
+            const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+            
+            // Add empty days
+            for (let i = 0; i < daysFromMonday; i++) {
+                days.push({ empty: true, date: null });
+            }
+            
+            // Add all days of August
+            for (let day = 1; day <= 31; day++) {
+                days.push({
+                    empty: false,
+                    date: day,
+                    shifts: scheduleData[day] ? scheduleData[day].shifts : []
+                });
+            }
+            
+            // Fill remaining cells
+            while (days.length % 7 !== 0) {
+                days.push({ empty: true, date: null });
+            }
+            
+            return days;
+        }
+
+        function generateCalendar() {
+            const calendarGrid = document.getElementById('calendarGrid');
+            const days = getCalendarDays();
+            
+            calendarGrid.innerHTML = '';
+            
+            days.forEach((day) => {
+                const dayElement = document.createElement('div');
+                dayElement.className = `calendar-day ${day.empty ? 'empty' : ''}`;
+                
+                if (day.empty) {
+                    dayElement.innerHTML = '';
+                } else {
+                    const shiftsHtml = day.shifts.length > 0 ? day.shifts.map(shift => `
+                        <div class="shift-badge badge-${shift.employee}" 
+                             data-employee="${shift.employee}"
+                             onclick="shiftClick('${shift.employee}', ${day.date}, '${shift.time}')">
+                            <div class="employee-name">${shift.icon} ${shift.name}</div>
+                            <div class="shift-time">${shift.time}</div>
+                        </div>
+                    `).join('') : `
+                        <div class="shift-badge" style="background: #f3f4f6; color: #9ca3af; border-left-color: #d1d5db;">
+                            <div class="employee-name">💤 Libre</div>
+                        </div>
+                    `;
+                    
+                    dayElement.innerHTML = `
+                        <div class="day-number">
+                            ${day.date}
+                            <div class="day-indicator"></div>
+                        </div>
+                        <div class="shifts-container">
+                            ${shiftsHtml}
+                        </div>
+                    `;
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            });
+        }
+
+        function filterEmployee(employee) {
+            currentFilter = employee;
+            
+            // Update tab states
+            document.querySelectorAll('.employee-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-employee="${employee}"]`).classList.add('active');
+            
+            // Apply filter
+            const shiftBadges = document.querySelectorAll('.shift-badge[data-employee]');
+            
+            shiftBadges.forEach(badge => {
+                const employeeType = badge.dataset.employee;
+                
+                if (employee === 'all') {
+                    badge.style.display = 'flex';
+                    badge.style.opacity = '1';
+                } else if (employeeType === employee) {
+                    badge.style.display = 'flex';
+                    badge.style.opacity = '1';
+                } else {
+                    badge.style.opacity = '0.3';
+                }
+            });
+
+            // Haptic feedback on mobile
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        function shiftClick(employee, day, time) {
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+            
+            showNotification(`${employee}: ${time} (Día ${day})`);
+        }
+
+        function changeMonth(direction) {
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                showNotification(direction > 0 ? 'Próximamente: Septiembre 2025' : 'Próximamente: Julio 2025');
+            }, 500);
+        }
+
+        function shareCalendar() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Calendario de Turnos - Agosto 2025',
+                    text: 'Consulta los turnos de trabajo de nuestro equipo',
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing:', err));
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showNotification('¡Enlace copiado! Compártelo con tus compañeros 📋');
+                });
+            } else {
+                showNotification('Comparte este enlace: ' + window.location.href);
+            }
+            
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
+        }
+
+        function showInstallPrompt() {
+            if (deferredPrompt) {
+                document.getElementById('installPrompt').classList.add('show');
+            } else {
+                showNotification('Usa "Añadir a pantalla de inicio" desde el menú del navegador');
+            }
+        }
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showNotification('¡Instalando app! 🚀');
+                    }
+                    deferredPrompt = null;
+                    hideInstallPrompt();
+                });
+            }
+        }
+
+        function hideInstallPrompt() {
+            document.getElementById('installPrompt').classList.remove('show');
+        }
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('show');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('show');
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Touch and swipe handling
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 100;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                const employees = ['all', 'rosemary', 'alfred', 'rocio', 'andrea'];
+                const currentIndex = employees.indexOf(currentFilter);
+                
+                if (diff > 0 && currentIndex < employees.length - 1) {
+                    // Swipe left - next employee
+                    filterEmployee(employees[currentIndex + 1]);
+                } else if (diff < 0 && currentIndex > 0) {
+                    // Swipe right - previous employee
+                    filterEmployee(employees[currentIndex - 1]);
+                }
+            }
+        }
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading();
+            
+            setTimeout(() => {
+                generateCalendar();
+                hideLoading();
+                showNotification('¡Calendario cargado! Desliza para filtrar empleados 👆');
+            }, 1000);
+            
+            // Hide address bar on mobile
+            setTimeout(() => {
+                window.scrollTo(0, 1);
+            }, 500);
+        });
+
+        // Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                const CACHE_NAME = 'turnos-v1';
+                const urlsToCache = ['/'];
+                
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                        .then(cache => cache.addAll(urlsToCache))
+                    );
+                });
+                
+                self.addEventListener('fetch', event => {
+                    event.respondWith(
+                        caches.match(event.request)
+                        .then(response => response || fetch(event.request))
+                    );
+                });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(() => console.log('SW registered'))
+                    .catch(() => console.log('SW registration failed'));
+            });
+        }
+
+        // Add to homescreen detection
+        let displayMode = 'browser';
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+            displayMode = 'standalone';
+        }
+
+        // Update UI based on display mode
+        if (displayMode === 'standalone') {
+            document.body.classList.add('standalone');
+            document.getElementById('installBtn').style.display = 'none';
+        }
+
+        // Handle orientation changes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
+        });
+
+        // Prevent pull-to-refresh
+        document.body.addEventListener('touchstart', e => {
+            if (e.touches.length === 1 && window.pageYOffset === 0) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.body.addEventListener('touchmove', e => {
+            if (e.touches.length === 1 && window.pageYOffset === 0) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
