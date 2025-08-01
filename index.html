@@ -38,7 +38,7 @@
         .header {
             background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
             color: white;
-            padding: max(20px, env(safe-area-inset-top)) 20px 25px;
+            padding: max(15px, env(safe-area-inset-top)) 15px 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -47,7 +47,7 @@
         .header::before {
             content: '📅';
             position: absolute;
-            font-size: 6rem;
+            font-size: 4rem;
             opacity: 0.08;
             top: 50%;
             left: 50%;
@@ -61,9 +61,9 @@
         }
 
         h1 {
-            font-size: clamp(1.8rem, 6vw, 3rem);
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             font-weight: 800;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             letter-spacing: -0.5px;
             position: relative;
@@ -71,7 +71,7 @@
         }
 
         .subtitle {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
             opacity: 0.9;
             font-weight: 300;
             position: relative;
@@ -81,21 +81,21 @@
         .status-badge {
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
             font-weight: 600;
-            margin: 12px auto 0;
+            margin: 10px auto 0;
             display: inline-block;
             box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
         }
 
         .toolbar {
             background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            padding: 15px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             border-bottom: 2px solid #e2e8f0;
             position: sticky;
             top: 0;
@@ -107,21 +107,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .month-btn {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 12px 16px;
+            padding: 10px;
             border-radius: 50%;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
-            width: 50px;
-            height: 50px;
+            font-size: 1rem;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -135,38 +135,38 @@
         }
 
         .month-title {
-            font-size: clamp(1.4rem, 5vw, 2rem);
+            font-size: clamp(1.2rem, 4.5vw, 1.8rem);
             font-weight: 800;
             color: #1a1a2e;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             text-align: center;
-            min-width: 200px;
+            min-width: 180px;
         }
 
         .employee-filters {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 8px;
-            max-width: 600px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
         .employee-btn {
-            padding: 12px 8px;
+            padding: 8px 4px;
             border: 2px solid transparent;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
             transition: all 0.3s ease;
-            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+            font-size: clamp(0.6rem, 2vw, 0.75rem);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 2px;
             position: relative;
             overflow: hidden;
-            min-height: 60px;
+            min-height: 50px;
             touch-action: manipulation;
             user-select: none;
         }
@@ -205,25 +205,25 @@
         .balance-info {
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
-            padding: 12px 15px;
-            margin: 0 15px 15px;
-            border-radius: 12px;
+            padding: 10px 12px;
+            margin: 0 12px 12px;
+            border-radius: 10px;
             text-align: center;
             font-weight: 600;
-            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-            line-height: 1.4;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            line-height: 1.3;
         }
 
         .calendar-container {
-            padding: 15px;
+            padding: 8px;
             background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
         }
 
         .calendar {
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
 
         .calendar-header {
@@ -234,11 +234,11 @@
         }
 
         .day-header {
-            padding: 15px 5px;
+            padding: 10px 3px;
             text-align: center;
             font-weight: 800;
-            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
-            letter-spacing: 0.5px;
+            font-size: clamp(0.6rem, 2vw, 0.8rem);
+            letter-spacing: 0.3px;
         }
 
         .calendar-grid {
@@ -250,8 +250,8 @@
 
         .calendar-day {
             background: white;
-            min-height: clamp(100px, 20vw, 140px);
-            padding: 8px;
+            min-height: clamp(80px, 18vw, 120px);
+            padding: 4px;
             position: relative;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -274,18 +274,18 @@
         }
 
         .day-number {
-            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
             font-weight: 800;
             color: #1e293b;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .day-indicator {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: linear-gradient(135deg, #10b981, #059669);
         }
@@ -293,23 +293,23 @@
         .shift-container {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            height: calc(100% - 30px);
+            gap: 2px;
+            height: calc(100% - 22px);
         }
 
         .shift-badge {
-            padding: 6px 8px;
-            border-radius: 8px;
-            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            padding: 3px 4px;
+            border-radius: 6px;
+            font-size: clamp(0.5rem, 1.5vw, 0.65rem);
             font-weight: 600;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 1px;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            line-height: 1.2;
+            line-height: 1.1;
             touch-action: manipulation;
         }
 
@@ -319,25 +319,25 @@
 
         .badge-carmen, .badge-rosemary {
             background: linear-gradient(135deg, #fdf2f8, #fce7f3);
-            border-left: 3px solid #ec4899;
+            border-left: 2px solid #ec4899;
             color: #be185d;
         }
 
         .badge-alfred {
             background: linear-gradient(135deg, #ecfeff, #cffafe);
-            border-left: 3px solid #0891b2;
+            border-left: 2px solid #0891b2;
             color: #164e63;
         }
 
         .badge-rocio {
             background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-            border-left: 3px solid #10b981;
+            border-left: 2px solid #10b981;
             color: #065f46;
         }
 
         .badge-andrea {
             background: linear-gradient(135deg, #fffbeb, #fef3c7);
-            border-left: 3px solid #f59e0b;
+            border-left: 2px solid #f59e0b;
             color: #92400e;
         }
 
@@ -346,47 +346,47 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            gap: 2px;
+            font-size: clamp(0.5rem, 1.5vw, 0.65rem);
             text-align: center;
         }
 
         .shift-time {
-            font-size: clamp(0.5rem, 1.8vw, 0.65rem);
+            font-size: clamp(0.45rem, 1.3vw, 0.55rem);
             opacity: 0.8;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 2px;
+            gap: 1px;
             text-align: center;
         }
 
         .stats-panel {
             background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
-            padding: 25px 15px max(25px, env(safe-area-inset-bottom));
+            padding: 20px 12px max(20px, env(safe-area-inset-bottom));
         }
 
         .stats-title {
             text-align: center;
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-size: clamp(1.1rem, 3.5vw, 1.6rem);
             font-weight: 800;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .stat-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 12px 8px;
             text-align: center;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -399,15 +399,15 @@
         }
 
         .stat-icon {
-            font-size: clamp(1.2rem, 4vw, 2rem);
-            margin-bottom: 8px;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            margin-bottom: 6px;
             display: block;
         }
 
         .stat-number {
-            font-size: clamp(1.4rem, 5vw, 2rem);
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
             font-weight: 900;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -415,22 +415,22 @@
         }
 
         .stat-label {
-            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
             opacity: 0.9;
             font-weight: 600;
         }
 
         .employee-summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
         }
 
         .employee-stat {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 10px 6px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
@@ -443,14 +443,14 @@
         }
 
         .employee-avatar {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            margin: 0 auto 10px;
+            margin: 0 auto 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 800;
             color: white;
         }
@@ -468,75 +468,98 @@
             }
 
             .header {
-                padding-top: max(env(safe-area-inset-top), 20px);
+                padding-top: max(env(safe-area-inset-top), 15px);
             }
 
             .stats-panel {
-                padding-bottom: max(env(safe-area-inset-bottom), 25px);
+                padding-bottom: max(env(safe-area-inset-bottom), 20px);
+            }
+        }
+
+        /* Extra small mobile devices */
+        @media (max-width: 360px) {
+            .toolbar {
+                padding: 10px 8px;
+                gap: 10px;
+            }
+            
+            .employee-filters {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 4px;
+            }
+            
+            .employee-btn {
+                min-height: 45px;
+                padding: 6px 2px;
+                font-size: 0.6rem;
+            }
+            
+            .calendar-day {
+                min-height: 70px;
+                padding: 3px;
+            }
+            
+            .balance-info {
+                margin: 0 8px 10px;
+                padding: 8px 10px;
+                font-size: 0.7rem;
+            }
+            
+            .calendar-container {
+                padding: 6px;
+            }
+
+            .day-header {
+                padding: 8px 2px;
+                font-size: 0.6rem;
+            }
+
+            .shift-badge {
+                padding: 2px 3px;
+                gap: 0px;
+            }
+
+            .employee-name, .shift-time {
+                font-size: 0.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+            }
+
+            .employee-summary {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+            }
+
+            .employee-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+                margin-bottom: 6px;
             }
         }
 
         /* Small mobile devices */
-        @media (max-width: 480px) {
-            .toolbar {
-                padding: 12px;
-                gap: 12px;
-            }
-            
-            .employee-filters {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 6px;
-            }
-            
-            .employee-btn {
-                min-height: 55px;
-                padding: 8px 4px;
-                font-size: 0.7rem;
-            }
-            
+        @media (min-width: 361px) and (max-width: 480px) {
             .calendar-day {
-                min-height: 90px;
+                min-height: 85px;
                 padding: 4px;
             }
             
-            .balance-info {
-                margin: 0 10px 12px;
-                padding: 10px 12px;
-                font-size: 0.75rem;
-            }
-            
-            .calendar-container {
-                padding: 10px;
-            }
-
-            .day-header {
-                padding: 12px 3px;
-                font-size: 0.7rem;
-            }
-
-            .shift-badge {
-                padding: 4px 6px;
-                gap: 1px;
-            }
-
-            .employee-name, .shift-time {
-                font-size: 0.6rem;
-            }
-        }
-
-        /* Very small devices */
-        @media (max-width: 375px) {
-            .employee-filters {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .employee-btn {
-                min-height: 50px;
+                min-height: 48px;
             }
-            
-            .calendar-day {
-                min-height: 80px;
-                padding: 3px;
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+
+            .employee-summary {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
             }
         }
 
@@ -559,6 +582,16 @@
                 flex-direction: row;
                 min-height: 50px;
                 padding: 12px 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+
+            .employee-summary {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
             }
 
             .calendar-day:hover {
@@ -719,22 +752,22 @@
             <div class="employee-summary">
                 <div class="employee-stat">
                     <div class="employee-avatar avatar-carmen" id="carmenAvatar">C</div>
-                    <div class="stat-number" style="font-size: clamp(1.2rem, 4vw, 1.8rem);" id="carmen-hours">159</div>
+                    <div class="stat-number" style="font-size: clamp(1rem, 3.5vw, 1.4rem);" id="carmen-hours">159</div>
                     <div class="stat-label" id="carmenLabel">Horas Carmen</div>
                 </div>
                 <div class="employee-stat">
                     <div class="employee-avatar avatar-alfred">A</div>
-                    <div class="stat-number" style="font-size: clamp(1.2rem, 4vw, 1.8rem);" id="alfred-hours">158</div>
+                    <div class="stat-number" style="font-size: clamp(1rem, 3.5vw, 1.4rem);" id="alfred-hours">158</div>
                     <div class="stat-label">Horas Alfred</div>
                 </div>
                 <div class="employee-stat">
                     <div class="employee-avatar avatar-rocio">R</div>
-                    <div class="stat-number" style="font-size: clamp(1.2rem, 4vw, 1.8rem);" id="rocio-hours">147</div>
+                    <div class="stat-number" style="font-size: clamp(1rem, 3.5vw, 1.4rem);" id="rocio-hours">147</div>
                     <div class="stat-label">Horas Rocío</div>
                 </div>
                 <div class="employee-stat">
                     <div class="employee-avatar avatar-andrea">A</div>
-                    <div class="stat-number" style="font-size: clamp(1.2rem, 4vw, 1.8rem);" id="andrea-hours">81</div>
+                    <div class="stat-number" style="font-size: clamp(1rem, 3.5vw, 1.4rem);" id="andrea-hours">81</div>
                     <div class="stat-label">Horas Andrea</div>
                 </div>
             </div>
