@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Manager Pro - Sistema Avanzado de Turnos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --dark-gradient: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: #1f2937;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Navigation Bar */
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-soft);
+        }
+        .nav-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+        }
+        .logo-icon {
+            font-size: 2rem;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+        }
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .nav-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(10px);
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+        .content-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .calendar-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-strong);
+            backdrop-filter: blur(20px);
+        }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        /* Month Navigation */
+        .month-navigation {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(20px);
+        }
+        .month-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .month-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .month-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .current-month {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1f2937;
+        }
+        .month-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .info-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 10px;
+        }
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+        .info-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        /* Employee Filters */
+        .employee-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(20px);
+        }
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .employee-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .employee-btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .employee-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+        .employee-btn:hover::before {
+            left: 100%;
+        }
+        .employee-btn:hover {
+            transform: translateX(5px) scale(1.02);
+            box-shadow: var(--shadow-soft);
+        }
+        .employee-btn.active {
+            transform: translateX(5px) scale(1.02);
+            border-color: currentColor;
+            box-shadow: var(--shadow-soft);
+        }
+        .employee-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: white;
+            font-size: 0.9rem;
+        }
+        .btn-all { 
+            background: linear-gradient(135deg, #374151, #1f2937);
+            color: white;
+        }
+        .btn-kathy { 
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            color: white;
+        }
+        .btn-jenny { 
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+        }
+        .btn-rocio { 
+            background: linear-gradient(135deg, #34d399, #10b981);
+            color: white;
+        }
+        .btn-andrea { 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+        .avatar-all { background: linear-gradient(135deg, #374151, #1f2937); }
+        .avatar-kathy { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+        .avatar-jenny { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .avatar-rocio { background: linear-gradient(135deg, #34d399, #10b981); }
+        .avatar-andrea { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+        /* Quick Stats */
+        .quick-stats {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(20px);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 10px;
+            transition: var(--transition-smooth);
+        }
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        /* Calendar */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .calendar-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1f2937;
+        }
+        .view-toggles {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+        .view-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+        .calendar-grid {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+        .calendar-days-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: var(--dark-gradient);
+            color: white;
+        }
+        .day-header {
+            padding: 1rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        .day-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        .day-header:hover::before {
+            transform: translateX(100%);
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            min-height: 700px;
+        }
+        .calendar-day {
+            border: 1px solid #f3f4f6;
+            min-height: 120px;
+            padding: 0.75rem;
+            position: relative;
+            background: white;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .calendar-day:hover {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            transform: scale(1.02);
+            z-index: 10;
+            box-shadow: var(--shadow-strong);
+        }
+        .calendar-day.empty {
+            background: #f9fafb;
+            cursor: default;
+        }
+        .calendar-day.empty:hover {
+            transform: none;
+            box-shadow: none;
+            background: #f9fafb;
+        }
+        .day-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .day-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+        .shifts-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow: hidden;
+        }
+        .shift-badge {
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border-left: 3px solid;
+        }
+        .shift-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .shift-badge:hover::before {
+            left: 100%;
+        }
+        .shift-badge:hover {
+            transform: translateX(3px) scale(1.05);
+            box-shadow: var(--shadow-soft);
+        }
+        .badge-kathy {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            border-left-color: #8b5cf6;
+            color: #5b21b6;
+        }
+        .badge-jenny {
+            background: linear-gradient(135deg, #fff7ed, #ffedd5);
+            border-left-color: #ea580c;
+            color: #99450b;
+        }
+        .badge-rocio {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border-left-color: #10b981;
+            color: #065f46;
+        }
+        .badge-andrea {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+        .shift-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .employee-name {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .shift-time {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        /* Monthly Summary */
+        .monthly-summary {
+            margin-top: 2rem;
+            background: var(--dark-gradient);
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-strong);
+        }
+        .summary-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .summary-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .summary-subtitle {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition-smooth);
+            border: 1px solid var(--glass-border);
+        }
+        .summary-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow-strong);
+        }
+        .summary-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .summary-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .summary-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+        .employee-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .employee-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition-smooth);
+        }
+        .employee-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .employee-card-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+        }
+        .employee-hours {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: #fbbf24;
+        }
+        .employee-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                flex-direction: row;
+                gap: 1rem;
+            }
+            .sidebar > * {
+                flex: 1;
+            }
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            .sidebar {
+                flex-direction: column;
+            }
+            .navbar {
+                padding: 1rem;
+            }
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .calendar-days {
+                min-height: 500px;
+            }
+            .calendar-day {
+                min-height: 80px;
+                padding: 0.5rem;
+            }
+            .calendar-title {
+                font-size: 1.5rem;
+            }
+            .view-toggles {
+                flex-wrap: wrap;
+            }
+            .summary-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        /* Animations */
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        .pulse-highlight {
+            animation: pulseHighlight 2s infinite;
+        }
+        @keyframes pulseHighlight {
+            0%, 100% { 
+                box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            }
+        }
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Status Indicators */
+        .status-indicator {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: statusPulse 2s infinite;
+        }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .correction-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 1rem auto;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+            display: inline-block;
+        }
+        /* React-style View Components */
+        .view-container {
+            display: none;
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-strong);
+            backdrop-filter: blur(20px);
+        }
+        .view-container.active {
+            display: block;
+        }
+        .grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .day-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid #f3f4f6;
+            transition: var(--transition-smooth);
+        }
+        .day-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-strong);
+        }
+        .day-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .day-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .day-number {
+            font-size: 0.9rem;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+        }
+        .shift-item {
+            padding: 0.75rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .shift-item:hover {
+            transform: translateX(5px);
+        }
+        .shift-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .employee-name {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .shift-time {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .stats-grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid #f3f4f6;
+            transition: var(--transition-smooth);
+        }
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-strong);
+        }
+        .stats-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .stats-icon {
+            font-size: 1.5rem;
+            color: #6b7280;
+        }
+        .stats-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+        .stats-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .stats-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .shift-type {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            margin-left: 0.5rem;
+        }
+        .morning-shift {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .night-shift {
+            background: #ddd6fe;
+            color: #581c87;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <a href="#" class="logo">
+                    <span class="logo-icon">📅</span>
+                    <span>Schedule Manager Pro</span>
+                </a>
+                <div class="nav-actions">
+                    <button class="nav-btn" onclick="exportSchedule()">📊 Exportar</button>
+                    <button class="nav-btn" onclick="printSchedule()">🖨️ Imprimir</button>
+                    <button class="nav-btn" onclick="toggleSettings()">⚙️ Ajustes</button>
+                </div>
+            </div>
+        </nav>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Calendar Section -->
+                    <div class="calendar-section">
+                        <div class="calendar-header">
+                            <h2 class="calendar-title">Calendario de Turnos - Noviembre 2025</h2>
+                            <div class="correction-badge">✅ Horas Corregidas y Verificadas</div>
+                            <div class="view-toggles">
+                                <button class="view-btn active" onclick="switchView('calendar')">Mes</button>
+                                <button class="view-btn" onclick="switchView('grid')">Días</button>
+                                <button class="view-btn" onclick="switchView('stats')">Estadísticas</button>
+                            </div>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-days-header">
+                                <div class="day-header">LUNES</div>
+                                <div class="day-header">MARTES</div>
+                                <div class="day-header">MIÉRCOLES</div>
+                                <div class="day-header">JUEVES</div>
+                                <div class="day-header">VIERNES</div>
+                                <div class="day-header">SÁBADO</div>
+                                <div class="day-header">DOMINGO</div>
+                            </div>
+                            <div class="calendar-days" id="calendarDays">
+                                <!-- Calendar days will be generated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <!-- Month Navigation -->
+                        <div class="month-navigation">
+                            <div class="month-controls">
+                                <button class="month-btn" onclick="changeMonth(-1)">◀</button>
+                                <h3 class="current-month" id="currentMonth">Noviembre 2025</h3>
+                                <button class="month-btn" onclick="changeMonth(1)">▶</button>
+                            </div>
+                            <div class="month-info">
+                                <div class="info-item">
+                                    <div class="info-value" id="totalDays">30</div>
+                                    <div class="info-label">Días</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-value" id="workDays">30</div>
+                                    <div class="info-label">Laborables</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Employee Filters -->
+                        <div class="employee-panel">
+                            <h3 class="panel-title">
+                                <span>👥</span>
+                                Filtros de Empleados
+                            </h3>
+                            <div class="employee-filters">
+                                <button class="employee-btn btn-all active" onclick="filterEmployee('all')">
+                                    <div class="employee-avatar avatar-all">👥</div>
+                                    <span>Todos los empleados</span>
+                                </button>
+                                <button class="employee-btn btn-kathy" onclick="filterEmployee('kathy')">
+                                    <div class="employee-avatar avatar-kathy">K</div>
+                                    <span>Kathy</span>
+                                </button>
+                                <button class="employee-btn btn-jenny" onclick="filterEmployee('jenny')">
+                                    <div class="employee-avatar avatar-jenny">J</div>
+                                    <span>Jenny</span>
+                                </button>
+                                <button class="employee-btn btn-rocio" onclick="filterEmployee('rocio')">
+                                    <div class="employee-avatar avatar-rocio">R</div>
+                                    <span>Rocío</span>
+                                </button>
+                                <button class="employee-btn btn-andrea" onclick="filterEmployee('andrea')">
+                                    <div class="employee-avatar avatar-andrea">A</div>
+                                    <span>Andrea</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Quick Stats -->
+                        <div class="quick-stats">
+                            <h3 class="panel-title">
+                                <span>📊</span>
+                                Estadísticas Rápidas
+                            </h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-icon">🌅</div>
+                                    <div class="stat-number" id="morningShifts">30</div>
+                                    <div class="stat-label">T. Mañana</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">🌙</div>
+                                    <div class="stat-number" id="nightShifts">30</div>
+                                    <div class="stat-label">T. Noche</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">⏰</div>
+                                    <div class="stat-number" id="totalShifts">60</div>
+                                    <div class="stat-label">T. Totales</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">📈</div>
+                                    <div class="stat-number" id="totalHours">525</div>
+                                    <div class="stat-label">H. Totales</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Grid View (React-style) -->
+                <div id="gridView" class="view-container">
+                    <div class="calendar-header">
+                        <h2 class="calendar-title">Vista de Días</h2>
+                    </div>
+                    <div class="grid-view" id="gridViewContainer">
+                        <!-- Day cards will be generated by JavaScript -->
+                    </div>
+                </div>
+                <!-- Stats View (React-style) -->
+                <div id="statsView" class="view-container">
+                    <div class="calendar-header">
+                        <h2 class="calendar-title">Estadísticas Detalladas</h2>
+                    </div>
+                    <div class="stats-grid-view" id="statsViewContainer">
+                        <!-- Stats cards will be generated by JavaScript -->
+                    </div>
+                </div>
+                <!-- Monthly Summary -->
+                <div class="monthly-summary">
+                    <div class="summary-header">
+                        <h3 class="summary-title">📊 Resumen Mensual - Noviembre 2025</h3>
+                        <p class="summary-subtitle">Estadísticas completas y análisis de turnos</p>
+                    </div>
+                    <div class="summary-stats">
+                        <div class="summary-card">
+                            <span class="summary-icon">📅</span>
+                            <div class="summary-number">30</div>
+                            <div class="summary-label">Días del Mes</div>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-icon">⏰</span>
+                            <div class="summary-number">60</div>
+                            <div class="summary-label">Turnos Asignados</div>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-icon">🌅</span>
+                            <div class="summary-number">30</div>
+                            <div class="summary-label">Turnos Matutinos</div>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-icon">🌙</span>
+                            <div class="summary-number">30</div>
+                            <div class="summary-label">Turnos Nocturnos</div>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-icon">👥</span>
+                            <div class="summary-number">4</div>
+                            <div class="summary-label">Empleados Activos</div>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-icon">📊</span>
+                            <div class="summary-number">17.5</div>
+                            <div class="summary-label">Horas Promedio/Día</div>
+                        </div>
+                    </div>
+                    <div class="employee-summary">
+                        <div class="employee-card">
+                            <div class="employee-card-avatar avatar-kathy">K</div>
+                            <div class="employee-hours">115</div>
+                            <div class="employee-label">Horas Kathy</div>
+                        </div>
+                        <div class="employee-card">
+                            <div class="employee-card-avatar avatar-jenny">J</div>
+                            <div class="employee-hours">115</div>
+                            <div class="employee-label">Horas Jenny</div>
+                        </div>
+                        <div class="employee-card">
+                            <div class="employee-card-avatar avatar-rocio">R</div>
+                            <div class="employee-hours">214</div>
+                            <div class="employee-label">Horas Rocío</div>
+                        </div>
+                        <div class="employee-card">
+                            <div class="employee-card-avatar avatar-andrea">A</div>
+                            <div class="employee-hours">81</div>
+                            <div class="employee-label">Horas Andrea</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Schedule data structure for November 2025 with updated morning shift pattern
+        const scheduleData = {
+            1: {day: 'Sábado', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            2: {day: 'Domingo', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            3: {day: 'Lunes', shifts: [
+                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            4: {day: 'Martes', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            5: {day: 'Miércoles', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            6: {day: 'Jueves', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            7: {day: 'Viernes', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            8: {day: 'Sábado', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            9: {day: 'Domingo', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            10: {day: 'Lunes', shifts: [
+                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            11: {day: 'Martes', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            12: {day: 'Miércoles', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            13: {day: 'Jueves', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            14: {day: 'Viernes', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            15: {day: 'Sábado', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            16: {day: 'Domingo', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            17: {day: 'Lunes', shifts: [
+                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            18: {day: 'Martes', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            19: {day: 'Miércoles', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            20: {day: 'Jueves', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            21: {day: 'Viernes', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            22: {day: 'Sábado', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            23: {day: 'Domingo', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            24: {day: 'Lunes', shifts: [
+                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            25: {day: 'Martes', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            26: {day: 'Miércoles', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            27: {day: 'Jueves', shifts: [
+                {employee: 'kathy', name: 'Kathy', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
+            ]},
+            28: {day: 'Viernes', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            29: {day: 'Sábado', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
+            ]},
+            30: {day: 'Domingo', shifts: [
+                {employee: 'jenny', name: 'Jenny', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙', type: 'night'}
+            ]}
+        };
+        
+        // Application state
+        let currentFilter = 'all';
+        let currentView = 'calendar';
+        let currentMonth = 11; // November
+        let currentYear = 2025;
+        
+        // Employee colors and styles
+        const employeeColors = {
+            kathy: { bg: 'rgba(167, 139, 250, 0.1)', border: '#8b5cf6', text: '#5b21b6' },
+            jenny: { bg: 'rgba(249, 115, 22, 0.1)', border: '#ea580c', text: '#99450b' },
+            rocio: { bg: 'rgba(52, 211, 153, 0.1)', border: '#10b981', text: '#065f46' },
+            andrea: { bg: 'rgba(251, 191, 36, 0.1)', border: '#f59e0b', text: '#92400e' }
+        };
+        
+        // Utility functions
+        function parseTimeRange(timeRange) {
+            const [start, end] = timeRange.split(' - ');
+            const [startHour, startMin] = start.split(':').map(Number);
+            const [endHour, endMin] = end.split(':').map(Number);
+            let startTime = startHour + (startMin / 60);
+            let endTime = endHour + (endMin / 60);
+            if (endTime < startTime) {
+                endTime += 24;
+            }
+            return endTime - startTime;
+        }
+        
+        function calculateEmployeeHours() {
+            const employeeTotals = {
+                kathy: 0,
+                jenny: 0,
+                rocio: 0,
+                andrea: 0
+            };
+            
+            for (let day = 1; day <= 30; day++) {
+                if (scheduleData[day]) {
+                    scheduleData[day].shifts.forEach(shift => {
+                        const hours = parseTimeRange(shift.time);
+                        employeeTotals[shift.employee] += hours;
+                    });
+                }
+            }
+            return employeeTotals;
+        }
+        
+        function getEmployeeStats() {
+            const stats = {};
+            Object.values(scheduleData).forEach(day => {
+                day.shifts.forEach(shift => {
+                    if (!stats[shift.employee]) {
+                        stats[shift.employee] = { 
+                            name: shift.name, 
+                            totalHours: 0, 
+                            shifts: 0, 
+                            morningShifts: 0, 
+                            nightShifts: 0 
+                        };
+                    }
+                    stats[shift.employee].totalHours += parseTimeRange(shift.time);
+                    stats[shift.employee].shifts++;
+                    if (shift.type === 'morning') stats[shift.employee].morningShifts++;
+                    else stats[shift.employee].nightShifts++;
+                });
+            });
+            return stats;
+        }
+        
+        function getCalendarDays() {
+            const days = [];
+            const novemberStart = new Date(2025, 10, 1);
+            const dayOfWeek = novemberStart.getDay();
+            const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+            
+            // Add empty days for the beginning
+            for (let i = 0; i < daysFromMonday; i++) {
+                days.push({ empty: true, date: null });
+            }
+            
+            // Add all days of November
+            for (let day = 1; day <= 30; day++) {
+                const date = new Date(2025, 10, day);
+                const dayName = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][date.getDay()];
+                days.push({
+                    empty: false,
+                    date: day,
+                    dayName: dayName,
+                    shifts: scheduleData[day] ? scheduleData[day].shifts : []
+                });
+            }
+            
+            // Fill remaining cells
+            while (days.length % 7 !== 0) {
+                days.push({ empty: true, date: null });
+            }
+            
+            return days;
+        }
+        
+        function generateCalendar() {
+            const calendarDays = document.getElementById('calendarDays');
+            const days = getCalendarDays();
+            calendarDays.innerHTML = '';
+            
+            days.forEach((day, index) => {
+                const dayElement = document.createElement('div');
+                dayElement.className = `calendar-day ${day.empty ? 'empty' : ''} fade-in`;
+                dayElement.style.animationDelay = `${index * 0.02}s`;
+                
+                if (day.empty) {
+                    dayElement.innerHTML = '';
+                } else {
+                    const shiftsHtml = day.shifts.length > 0 ? day.shifts.map(shift => `
+                        <div class="shift-badge badge-${shift.employee}" 
+                             data-employee="${shift.employee}" 
+                             data-type="${shift.type}"
+                             onclick="shiftClick('${shift.employee}', ${day.date}, '${shift.time}')">
+                            <div class="shift-info">
+                                <div class="employee-name">
+                                    ${shift.icon} ${shift.name}
+                                </div>
+                                <div class="shift-time">⏰ ${shift.time}</div>
+                            </div>
+                        </div>
+                    `).join('') : `
+                        <div class="shift-badge" style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); color: #64748b; border-left-color: #cbd5e1;">
+                            <div class="shift-info">
+                                <div class="employee-name">💤 Día libre</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    dayElement.innerHTML = `
+                        <div class="day-number">
+                            ${day.date}
+                            <div class="day-indicator"></div>
+                        </div>
+                        <div class="shifts-container">
+                            ${shiftsHtml}
+                        </div>
+                        <div class="status-indicator"></div>
+                    `;
+                }
+                
+                // Add click effects
+                if (!day.empty) {
+                    dayElement.addEventListener('click', (e) => {
+                        if (!e.target.closest('.shift-badge')) {
+                            dayElement.classList.add('pulse-highlight');
+                            setTimeout(() => {
+                                dayElement.classList.remove('pulse-highlight');
+                            }, 2000);
+                        }
+                    });
+                }
+                
+                calendarDays.appendChild(dayElement);
+            });
+        }
+        
+        function generateGridView() {
+            const gridViewContainer = document.getElementById('gridViewContainer');
+            gridViewContainer.innerHTML = '';
+            
+            Object.entries(scheduleData).forEach(([dayNum, dayData]) => {
+                // Apply filter
+                if (currentFilter !== 'all') {
+                    dayData = { 
+                        ...dayData, 
+                        shifts: dayData.shifts.filter(shift => shift.employee === currentFilter) 
+                    };
+                    if (dayData.shifts.length === 0) return; // Skip days with no shifts for the filtered employee
+                }
+                
+                const dayCard = document.createElement('div');
+                dayCard.className = 'day-card';
+                
+                const shiftsHtml = dayData.shifts.map(shift => {
+                    const color = employeeColors[shift.employee];
+                    return `
+                        <div class="shift-item" style="background: ${color.bg}; border-left: 3px solid ${color.border}; color: ${color.text}">
+                            <div class="shift-info">
+                                <div class="employee-name">
+                                    ${shift.icon} ${shift.name}
+                                </div>
+                                <div class="shift-time">
+                                    <i class="fas fa-clock"></i> ${shift.time}
+                                </div>
+                            </div>
+                            <span class="shift-type ${shift.type}-shift">${shift.type === 'morning' ? '🌅 Mañana' : '🌙 Noche'}</span>
+                        </div>
+                    `;
+                }).join('');
+                
+                dayCard.innerHTML = `
+                    <div class="day-header-info">
+                        <div class="day-name">${dayData.day}</div>
+                        <div class="day-number">Día ${dayNum}</div>
+                    </div>
+                    <div class="shifts-list">
+                        ${shiftsHtml || '<div class="text-center text-gray-500 py-2">No hay turnos asignados</div>'}
+                    </div>
+                `;
+                
+                gridViewContainer.appendChild(dayCard);
+            });
+        }
+        
+        function generateStatsView() {
+            const statsViewContainer = document.getElementById('statsViewContainer');
+            statsViewContainer.innerHTML = '';
+            
+            const stats = getEmployeeStats();
+            
+            Object.entries(stats).forEach(([employeeId, employeeStats]) => {
+                // Apply filter
+                if (currentFilter !== 'all' && employeeId !== currentFilter) return;
+                
+                const color = employeeColors[employeeId];
+                const statsCard = document.createElement('div');
+                statsCard.className = 'stats-card';
+                statsCard.style.borderLeft = `4px solid ${color.border}`;
+                
+                statsCard.innerHTML = `
+                    <div class="stats-header">
+                        <i class="fas fa-users stats-icon"></i>
+                        <h3 class="stats-title">${employeeStats.name}</h3>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stats-item">
+                            <span class="stats-label">Total horas</span>
+                            <span class="stats-value">${employeeStats.totalHours}h</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">Total turnos</span>
+                            <span class="stats-value">${employeeStats.shifts}</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">Turnos matutinos</span>
+                            <span class="stats-value">${employeeStats.morningShifts}</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">Turnos nocturnos</span>
+                            <span class="stats-value">${employeeStats.nightShifts}</span>
+                        </div>
+                    </div>
+                `;
+                
+                statsViewContainer.appendChild(statsCard);
+            });
+        }
+        
+        function filterEmployee(employee) {
+            currentFilter = employee;
+            
+            // Update button states
+            document.querySelectorAll('.employee-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Regenerate views if they are active
+            if (currentView === 'grid') {
+                generateGridView();
+            } else if (currentView === 'stats') {
+                generateStatsView();
+            }
+            
+            // Apply filter to calendar view
+            const shiftBadges = document.querySelectorAll('.shift-badge[data-employee]');
+            const calendarDays = document.querySelectorAll('.calendar-day:not(.empty)');
+            
+            shiftBadges.forEach(badge => {
+                const employeeType = badge.dataset.employee;
+                if (employee === 'all') {
+                    badge.style.display = 'flex';
+                    badge.style.opacity = '1';
+                    badge.style.transform = 'translateX(0) scale(1)';
+                    badge.classList.remove('pulse-highlight');
+                } else if (employeeType === employee) {
+                    badge.style.display = 'flex';
+                    badge.style.opacity = '1';
+                    badge.style.transform = 'translateX(0) scale(1.02)';
+                    badge.classList.add('pulse-highlight');
+                } else if (employeeType) {
+                    badge.style.opacity = '0.2';
+                    badge.style.transform = 'translateX(-5px) scale(0.95)';
+                    badge.classList.remove('pulse-highlight');
+                }
+            });
+            
+            // Highlight days with filtered employee
+            calendarDays.forEach(day => {
+                const employeeBadges = day.querySelectorAll(`[data-employee="${employee}"]`);
+                if (employee !== 'all' && employeeBadges.length > 0) {
+                    day.style.background = 'linear-gradient(135deg, #eff6ff, #dbeafe)';
+                    day.style.borderColor = '#3b82f6';
+                    day.style.boxShadow = '0 4px 6px rgba(59, 130, 246, 0.1)';
+                } else {
+                    day.style.background = 'white';
+                    day.style.borderColor = '#f3f4f6';
+                    day.style.boxShadow = 'none';
+                }
+            });
+            
+            // Update stats for filtered view
+            updateFilteredStats(employee);
+        }
+        
+        function updateFilteredStats(employee) {
+            const employeeHours = calculateEmployeeHours();
+            let totalHours = 0;
+            let shifts = 0;
+            
+            if (employee === 'all') {
+                totalHours = Object.values(employeeHours).reduce((a, b) => a + b, 0);
+                shifts = Object.keys(scheduleData).reduce((total, day) => {
+                    return total + (scheduleData[day]?.shifts?.length || 0);
+                }, 0);
+            } else {
+                totalHours = employeeHours[employee] || 0;
+                shifts = Object.keys(scheduleData).reduce((total, day) => {
+                    const employeeShifts = scheduleData[day]?.shifts?.filter(s => s.employee === employee) || [];
+                    return total + employeeShifts.length;
+                }, 0);
+            }
+            
+            // Update quick stats
+            document.getElementById('totalHours').textContent = Math.round(totalHours);
+            document.getElementById('totalShifts').textContent = shifts;
+            
+            // Calculate morning and night shifts
+            const morningShifts = Object.values(scheduleData).reduce((total, day) => {
+                const morningCount = day.shifts.filter(s => s.type === 'morning' && (employee === 'all' || s.employee === employee)).length;
+                return total + morningCount;
+            }, 0);
+            
+            const nightShifts = Object.values(scheduleData).reduce((total, day) => {
+                const nightCount = day.shifts.filter(s => s.type === 'night' && (employee === 'all' || s.employee === employee)).length;
+                return total + nightCount;
+            }, 0);
+            
+            document.getElementById('morningShifts').textContent = morningShifts;
+            document.getElementById('nightShifts').textContent = nightShifts;
+        }
+        
+        function switchView(view) {
+            currentView = view;
+            
+            // Update button states
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide all views
+            document.querySelectorAll('.view-container').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Show the selected view
+            if (view === 'calendar') {
+                document.querySelector('.calendar-grid').style.display = 'block';
+            } else {
+                document.querySelector('.calendar-grid').style.display = 'none';
+                document.getElementById(`${view}View`).classList.add('active');
+                
+                // Generate content for the view if needed
+                if (view === 'grid') {
+                    generateGridView();
+                } else if (view === 'stats') {
+                    generateStatsView();
+                }
+            }
+        }
+        
+        function shiftClick(employee, day, time) {
+            // Add interactive feedback
+            event.stopPropagation();
+            const badge = event.currentTarget;
+            
+            // Create ripple effect
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+            
+            const rect = badge.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+            
+            badge.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+            
+            // Show shift details (could be expanded to show a modal)
+            console.log(`Shift Details: ${employee} on day ${day} from ${time}`);
+        }
+        
+        function changeMonth(direction) {
+            const monthTitle = document.getElementById('currentMonth');
+            
+            // Animation
+            monthTitle.style.transform = `translateX(${direction * 20}px)`;
+            monthTitle.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                // Update month (placeholder - would need full implementation)
+                monthTitle.style.transform = 'translateX(0)';
+                monthTitle.style.opacity = '1';
+            }, 300);
+        }
+        
+        function exportSchedule() {
+            // Create CSV data
+            let csv = 'Día,Fecha,Empleado,Turno,Horas\n';
+            
+            for (let day = 1; day <= 30; day++) {
+                if (scheduleData[day]) {
+                    const dayData = scheduleData[day];
+                    dayData.shifts.forEach(shift => {
+                        const hours = parseTimeRange(shift.time);
+                        csv += `${dayData.day},${day}/11/2025,${shift.name},${shift.time},${hours}\n`;
+                    });
+                }
+            }
+            
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'calendario-turnos-noviembre-2025.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Exportado';
+            btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 2000);
+        }
+        
+        function printSchedule() {
+            window.print();
+        }
+        
+        function toggleSettings() {
+            alert('Función de configuración en desarrollo');
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCalendar();
+            
+            // Calculate and verify hours
+            const employeeHours = calculateEmployeeHours();
+            console.log('Employee Hours:', employeeHours);
+            
+            // Update stats
+            updateFilteredStats('all');
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                const employees = ['all', 'kathy', 'jenny', 'rocio', 'andrea'];
+                const currentIndex = employees.indexOf(currentFilter);
+                
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    const newFilter = employees[currentIndex - 1];
+                    const btn = document.querySelector(`.btn-${newFilter}`);
+                    if (btn) btn.click();
+                } else if (e.key === 'ArrowRight' && currentIndex < employees.length - 1) {
+                    const newFilter = employees[currentIndex + 1];
+                    const btn = document.querySelector(`.btn-${newFilter}`);
+                    if (btn) btn.click();
+                }
+            });
+            
+            // Add intersection observer for animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            // Observe all animated elements
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Add responsive touch gestures for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            document.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        // Swipe left - next employee
+                        const employees = ['all', 'kathy', 'jenny', 'rocio', 'andrea'];
+                        const currentIndex = employees.indexOf(currentFilter);
+                        
+                        if (currentIndex < employees.length - 1) {
+                            const btn = document.querySelector(`.btn-${employees[currentIndex + 1]}`);
+                            if (btn) btn.click();
+                        }
+                    } else {
+                        // Swipe right - previous employee
+                        const employees = ['all', 'kathy', 'jenny', 'rocio', 'andrea'];
+                        const currentIndex = employees.indexOf(currentFilter);
+                        
+                        if (currentIndex > 0) {
+                            const btn = document.querySelector(`.btn-${employees[currentIndex - 1]}`);
+                            if (btn) btn.click();
+                        }
+                    }
+                }
+            }
+            
+            // Add smooth scrolling for better UX
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Performance optimization: lazy load calendar animations
+            const lazyAnimations = () => {
+                const cards = document.querySelectorAll('.summary-card, .employee-card, .stat-item');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            };
+            
+            // Trigger lazy animations after initial load
+            setTimeout(lazyAnimations, 500);
+            
+            // Add real-time clock update (optional enhancement)
+            function updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('es-ES');
+                // You could add a clock widget to the navbar if desired
+                console.log('Current time:', timeString);
+            }
+            
+            // Update clock every minute
+            setInterval(updateClock, 60000);
+            
+            // Add notification system for shift changes (placeholder)
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 10px;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                    z-index: 10000;
+                    opacity: 0;
+                    transform: translateX(100%);
+                    transition: all 0.3s ease;
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+                
+                // Auto remove
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+            
+            // Example usage - welcome message
+            setTimeout(() => {
+                showNotification('¡Bienvenido al Sistema de Turnos!', 'success');
+            }, 1000);
+        });
+        
+        // Add CSS animation keyframes dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            @media print {
+                .navbar, .nav-actions, .employee-filters, .view-toggles {
+                    display: none !important;
+                }
+                .calendar-section {
+                    box-shadow: none !important;
+                    border: 1px solid #ccc !important;
+                }
+                .monthly-summary {
+                    background: white !important;
+                    color: black !important;
+                }
+                body {
+                    background: white !important;
+                }
+            }
+            /* Custom scrollbar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            ::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.5);
+            }
+            /* Accessibility improvements */
+            @media (prefers-reduced-motion: reduce) {
+                *, *::before, *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+            }
+            /* Focus styles for better accessibility */
+            .employee-btn:focus,
+            .month-btn:focus,
+            .view-btn:focus,
+            .nav-btn:focus {
+                outline: 2px solid #fbbf24;
+                outline-offset: 2px;
+            }
+            /* High contrast mode support */
+            @media (prefers-contrast: high) {
+                .calendar-day {
+                    border: 2px solid #000;
+                }
+                .shift-badge {
+                    border: 1px solid #000;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Service Worker registration for PWA capabilities (optional)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // You could register a service worker here for offline functionality
+                console.log('Schedule Manager Pro loaded successfully');
+            });
+        }
+        
+        // Export functions for external use
+        window.ScheduleManager = {
+            filterEmployee,
+            switchView,
+            changeMonth,
+            exportSchedule,
+            calculateEmployeeHours,
+            generateCalendar
+        };
+    </script>
+</body>
+</html>
