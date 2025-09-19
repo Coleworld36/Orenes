@@ -252,6 +252,10 @@
             background: linear-gradient(135deg, #374151, #1f2937);
             color: white;
         }
+        .btn-carmen { 
+            background: linear-gradient(135deg, #22d3ee, #0891b2);
+            color: white;
+        }
         .btn-kathy { 
             background: linear-gradient(135deg, #a78bfa, #8b5cf6);
             color: white;
@@ -269,6 +273,7 @@
             color: white;
         }
         .avatar-all { background: linear-gradient(135deg, #374151, #1f2937); }
+        .avatar-carmen { background: linear-gradient(135deg, #22d3ee, #0891b2); }
         .avatar-kathy { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
         .avatar-jenny { background: linear-gradient(135deg, #f97316, #ea580c); }
         .avatar-rocio { background: linear-gradient(135deg, #34d399, #10b981); }
@@ -459,6 +464,11 @@
         .shift-badge:hover {
             transform: translateX(3px) scale(1.05);
             box-shadow: var(--shadow-soft);
+        }
+        .badge-carmen {
+            background: linear-gradient(135deg, #ecfeff, #cffafe);
+            border-left-color: #0891b2;
+            color: #164e63;
         }
         .badge-kathy {
             background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
@@ -946,6 +956,10 @@
                                     <div class="employee-avatar avatar-all">👥</div>
                                     <span>Todos los empleados</span>
                                 </button>
+                                <button class="employee-btn btn-carmen" onclick="filterEmployee('carmen')">
+                                    <div class="employee-avatar avatar-carmen">C</div>
+                                    <span>Carmen</span>
+                                </button>
                                 <button class="employee-btn btn-kathy" onclick="filterEmployee('kathy')">
                                     <div class="employee-avatar avatar-kathy">K</div>
                                     <span>Kathy</span>
@@ -1042,7 +1056,7 @@
                         </div>
                         <div class="summary-card">
                             <span class="summary-icon">👥</span>
-                            <div class="summary-number">4</div>
+                            <div class="summary-number">5</div>
                             <div class="summary-label">Empleados Activos</div>
                         </div>
                         <div class="summary-card">
@@ -1052,6 +1066,11 @@
                         </div>
                     </div>
                     <div class="employee-summary">
+                        <div class="employee-card">
+                            <div class="employee-card-avatar avatar-carmen">C</div>
+                            <div class="employee-hours">120</div>
+                            <div class="employee-label">Horas Carmen</div>
+                        </div>
                         <div class="employee-card">
                             <div class="employee-card-avatar avatar-kathy">K</div>
                             <div class="employee-hours">120</div>
@@ -1078,78 +1097,78 @@
         </main>
     </div>
     <script>
-        // Schedule data structure for September 2025 with the specified pattern
+        // Schedule data structure for September 2025 with updated pattern
         const scheduleData = {
             1: {day: 'Lunes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             2: {day: 'Martes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             3: {day: 'Miércoles', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             4: {day: 'Jueves', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             5: {day: 'Viernes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
             ]},
             6: {day: 'Sábado', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
             ]},
             7: {day: 'Domingo', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
                 {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             8: {day: 'Lunes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             9: {day: 'Martes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             10: {day: 'Miércoles', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             11: {day: 'Jueves', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             12: {day: 'Viernes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
             ]},
             13: {day: 'Sábado', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '18:00 - 03:00', icon: '🌙', type: 'night'}
             ]},
             14: {day: 'Domingo', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '8:00 - 18:00', icon: '🌅', type: 'morning'},
                 {employee: 'andrea', name: 'Andrea', time: '18:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             15: {day: 'Lunes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'andrea', name: 'Andrea', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             16: {day: 'Martes', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             17: {day: 'Miércoles', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             18: {day: 'Jueves', shifts: [
-                {employee: 'rocio', name: 'Rocío', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
+                {employee: 'carmen', name: 'Carmen', time: '7:00 - 17:00', icon: '🌅', type: 'morning'},
                 {employee: 'rocio', name: 'Rocío', time: '17:00 - 02:00', icon: '🌙', type: 'night'}
             ]},
             19: {day: 'Viernes', shifts: [
@@ -1210,6 +1229,7 @@
         
         // Employee colors and styles
         const employeeColors = {
+            carmen: { bg: 'rgba(34, 211, 238, 0.1)', border: '#0891b2', text: '#164e63' },
             kathy: { bg: 'rgba(167, 139, 250, 0.1)', border: '#8b5cf6', text: '#5b21b6' },
             jenny: { bg: 'rgba(249, 115, 22, 0.1)', border: '#ea580c', text: '#99450b' },
             rocio: { bg: 'rgba(52, 211, 153, 0.1)', border: '#10b981', text: '#065f46' },
@@ -1231,6 +1251,7 @@
         
         function calculateEmployeeHours() {
             const employeeTotals = {
+                carmen: 0,
                 kathy: 0,
                 jenny: 0,
                 rocio: 0,
@@ -1677,7 +1698,7 @@
             
             // Add keyboard navigation
             document.addEventListener('keydown', function(e) {
-                const employees = ['all', 'kathy', 'jenny', 'rocio', 'andrea'];
+                const employees = ['all', 'carmen', 'kathy', 'jenny', 'rocio', 'andrea'];
                 const currentIndex = employees.indexOf(currentFilter);
                 
                 if (e.key === 'ArrowLeft' && currentIndex > 0) {
@@ -1726,7 +1747,7 @@
                 if (Math.abs(diff) > swipeThreshold) {
                     if (diff > 0) {
                         // Swipe left - next employee
-                        const employees = ['all', 'kathy', 'jenny', 'rocio', 'andrea'];
+                        const employees = ['all', 'carmen', 'kathy', 'jenny', 'rocio', 'andrea'];
                         const currentIndex = employees.indexOf(currentFilter);
                         
                         if (currentIndex < employees.length - 1) {
@@ -1735,7 +1756,7 @@
                         }
                     } else {
                         // Swipe right - previous employee
-                        const employees = ['all', 'kathy', 'jenny', 'rocio', 'andrea'];
+                        const employees = ['all', 'carmen', 'kathy', 'jenny', 'rocio', 'andrea'];
                         const currentIndex = employees.indexOf(currentFilter);
                         
                         if (currentIndex > 0) {
